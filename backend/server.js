@@ -17,6 +17,11 @@ app.use(cors({
     credentials: true //Allows cookies to be sent. Also, needed for JWT athentication with cookies
 }));
 
+
+//Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+
+
 //Jst for testing
 app.get('/', (req, res) => {
     res.send('ChatFlow API is working.');
