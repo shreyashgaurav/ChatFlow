@@ -2,13 +2,18 @@ const express = require('express'); // Is a framework. All the below ones are mi
 const dotenv = require('dotenv'); //This is used to load environment variables from .env file
 const cors = require('cors'); //CORS => Cross-Origin Resource Sharing : A middleware that allows the frontend to talk to the backend
 const cookieParser = require('cookie-parser'); //Parse cookies from HTTP requests
+const http = require('http');
 const connectDB = require('./config/db');
-
+const { initializeSocket } = require('./socket/socket');
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
+const server = http.createServer(app);
+// Initializing Socket.IO
+initializeSocket(server);
 
 app.use(express.json()); //Middle ware for parsing json
 app.use(cookieParser()); //Middleware for parsing cookies
@@ -28,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running at the PORT ${PORT}`);
 });
 

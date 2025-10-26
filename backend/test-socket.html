@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket Test</title>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Socket.IO Test</h1>
+    <div id="status">Disconnected</div>
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+
+    <script>
+        let socket;
+        const token = 'YOUR_JWT_TOKEN_HERE'; // Paste your token from Postman login
+
+        function connect() {
+            socket = io('http://localhost:5000', {
+                auth: { token }
+            });
+
+            socket.on('connect', () => {
+                document.getElementById('status').textContent = 'Connected!';
+                console.log('Connected to Socket.IO');
+            });
+
+            socket.on('online-users', (users) => {
+                console.log('Online users:', users);
+            });
+
+            socket.on('user-online', (data) => {
+                console.log('User came online:', data);
+            });
+
+            socket.on('user-offline', (data) => {
+                console.log('User went offline:', data);
+            });
+
+            socket.on('disconnect', () => {
+                document.getElementById('status').textContent = 'Disconnected';
+                console.log('Disconnected');
+            });
+        }
+
+        function disconnect() {
+            if (socket) {
+                socket.disconnect();
+            }
+        }
+    </script>
+</body>
+</html>
